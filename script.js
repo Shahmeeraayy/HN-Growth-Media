@@ -1,8 +1,6 @@
-/* HN Growth Media — edit the two values below, nothing else needs changing. */
+/* HN Growth Media — edit the value below, nothing else needs changing. */
 const CONFIG = {
   email: "brownhazel2003@gmail.com",
-  // WhatsApp number in international format, digits only.
-  whatsapp: "923124671980",
 };
 
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -11,16 +9,6 @@ const hasGsap = typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefin
 
 // ---------- Basics ----------
 document.getElementById("year").textContent = new Date().getFullYear();
-
-document.querySelectorAll(".js-wa").forEach((a) => {
-  if (CONFIG.whatsapp) {
-    a.href = "https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent("Hi Mutahar, I would like a quote.");
-    a.target = "_blank";
-    a.rel = "noopener";
-  } else {
-    a.href = "mailto:" + CONFIG.email + "?subject=" + encodeURIComponent("Quote request");
-  }
-});
 
 // Mobile menu
 const menuBtn = document.querySelector(".menu-btn");
