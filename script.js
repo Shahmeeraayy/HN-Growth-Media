@@ -13,24 +13,39 @@ document.getElementById("year").textContent = new Date().getFullYear();
 // Mobile menu
 const menuBtn = document.querySelector(".menu-btn");
 const mobileNav = document.getElementById("mobile-nav");
-menuBtn.addEventListener("click", () => {
-  const open = menuBtn.getAttribute("aria-expanded") === "true";
-  menuBtn.setAttribute("aria-expanded", String(!open));
-  menuBtn.setAttribute("aria-label", open ? "Open menu" : "Close menu");
-  mobileNav.hidden = open;
-});
-mobileNav.querySelectorAll("a").forEach((a) =>
-  a.addEventListener("click", () => {
-    menuBtn.setAttribute("aria-expanded", "false");
-    mobileNav.hidden = true;
-  })
-);
+let lenis = null;
+function setMenu(open) {
+  menuBtn.setAttribute("aria-expanded", String(open));
+  menuBtn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+  mobileNav.hidden = !open;
+  document.body.classList.toggle("menu-open", open);
+  if (lenis) open ? lenis.stop() : lenis.start();
+  if (open && hasGsap && !reduceMotion) {
+    gsap.fromTo(".mobile-nav-inner a", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.07, ease: "power3.out" });
+    gsap.fromTo(".mobile-nav-foot", { opacity: 0 }, { opacity: 1, duration: 0.5, delay: 0.4 });
+  }
+}
+menuBtn.addEventListener("click", () => setMenu(menuBtn.getAttribute("aria-expanded") !== "true"));
+mobileNav.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => setMenu(false)));
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !mobileNav.hidden) setMenu(false); });
 
 // Header shadow on scroll
 const header = document.querySelector(".top");
-const onScrollHeader = () => header.classList.toggle("scrolled", window.scrollY > 10);
+let lastY = 0;
+const onScrollHeader = () => {
+  const y = window.scrollY;
+  header.classList.toggle("scrolled", y > 10);
+  header.classList.toggle("hidden", y > 300 && y > lastY + 4);
+  if (y < lastY - 4 || y <= 300) header.classList.remove("hidden");
+  lastY = y;
+};
 window.addEventListener("scroll", onScrollHeader, { passive: true });
 onScrollHeader();
+
+// Back to top
+document.querySelector(".to-top").addEventListener("click", () => {
+  if (lenis) lenis.scrollTo(0, { duration: 1.4 }); else window.scrollTo({ top: 0, behavior: "smooth" });
+});
 
 // Accordions: services and FAQ
 function wireAccordion(btn) {
@@ -96,7 +111,6 @@ if (!hasGsap || reduceMotion) {
   gsap.registerPlugin(ScrollTrigger);
 
   // Smooth scroll
-  let lenis = null;
   if (typeof Lenis !== "undefined") {
     lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
     lenis.on("scroll", ScrollTrigger.update);
@@ -159,7 +173,10 @@ if (!hasGsap || reduceMotion) {
     heroTl.play();
   };
 
-  if (loader) {
+  let seen = false;
+  try { seen = sessionStorage.getItem("hn-seen") === "1"; sessionStorage.setItem("hn-seen", "1"); } catch (e) {}
+  if (loader && seen) { loader.remove(); }
+  if (loader && !seen) {
     gsap.timeline()
       .to(".loader-bar span", { scaleX: 1, duration: 0.9, ease: "power2.inOut" })
       .to(".loader", { yPercent: -100, duration: 0.7, ease: "power4.inOut", onComplete: () => loader.remove() }, "+=0.1")
@@ -202,6 +219,59 @@ if (!hasGsap || reduceMotion) {
       onUpdate: () => { el.textContent = Math.round(obj.v); },
     });
   });
+
+  // Section headings: words rise in
+  document.querySelectorAll(".section-head h2, .about-copy h2, .contact-copy h2, .process-head h2").forEach((h) => {
+    const words = h.textContent.trim().split(/\s+/);
+    h.textContent = "";
+    h.classList.add("wsplit");
+    words.forEach((w, i) => {
+      const outer = document.createElement("span"); outer.className = "w";
+      const inner = document.createElement("span"); inner.className = "wi"; inner.textContent = w;
+      outer.appendChild(inner); h.appendChild(outer);
+      if (i < words.length - 1) h.appendChild(document.createTextNode(" "));
+    });
+    gsap.fromTo(h.querySelectorAll(".wi"), { yPercent: 110 }, {
+      yPercent: 0, duration: 0.9, stagger: 0.06, ease: "power4.out",
+      scrollTrigger: { trigger: h, start: "top 88%", once: true },
+    });
+  });
+
+  // Scroll progress line in the header
+  gsap.to(".progress", { scaleX: 1, ease: "none", scrollTrigger: { trigger: document.body, start: "top top", end: "bottom bottom", scrub: 0.3 } });
+
+  // Active nav link follows the section in view
+  document.querySelectorAll(".nav a[data-nav]").forEach((link) => {
+    const section = document.getElementById(link.dataset.nav);
+    if (!section) return;
+    ScrollTrigger.create({
+      trigger: section, start: "top 50%", end: "bottom 50%",
+      onToggle: (self) => link.classList.toggle("active", self.isActive),
+    });
+  });
+
+  // Timeline: gold line draws down, dots light up
+  const timeline = document.querySelector(".timeline");
+  if (timeline) {
+    gsap.to(timeline, { "--draw": 1, ease: "none", scrollTrigger: { trigger: timeline, start: "top 70%", end: "bottom 60%", scrub: 0.4 } });
+    document.querySelectorAll(".tl-item").forEach((item) => {
+      gsap.fromTo(item, { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.7, ease: "power3.out", scrollTrigger: { trigger: item, start: "top 82%", once: true } });
+      ScrollTrigger.create({ trigger: item, start: "top 65%", onEnter: () => item.classList.add("lit"), onLeaveBack: () => item.classList.remove("lit") });
+    });
+  }
+
+  // About photo tilts toward the pointer
+  const aboutPhoto = document.querySelector(".about-photo");
+  if (finePointer && aboutPhoto) {
+    const img = aboutPhoto.querySelector("img");
+    aboutPhoto.addEventListener("pointermove", (e) => {
+      const r = aboutPhoto.getBoundingClientRect();
+      const dx = (e.clientX - r.left) / r.width - 0.5;
+      const dy = (e.clientY - r.top) / r.height - 0.5;
+      gsap.to(img, { rotateY: dx * 10, rotateX: -dy * 6, x: dx * 14, duration: 0.4, ease: "power2.out", transformPerspective: 800 });
+    });
+    aboutPhoto.addEventListener("pointerleave", () => gsap.to(img, { rotateY: 0, rotateX: 0, x: 0, duration: 0.8, ease: "elastic.out(1, 0.5)" }));
+  }
 
   // Generic reveals
   gsap.utils.toArray(".reveal").forEach((el) => {
@@ -287,6 +357,8 @@ if (!hasGsap || reduceMotion) {
   const track = document.querySelector(".marquee-track");
   if (track) {
     const tween = gsap.to(track, { xPercent: -50, duration: 28, ease: "none", repeat: -1 });
+    track.parentElement.addEventListener("pointerenter", () => gsap.to(tween, { timeScale: 0.15, duration: 0.5 }));
+    track.parentElement.addEventListener("pointerleave", () => gsap.to(tween, { timeScale: 1, duration: 0.5 }));
     ScrollTrigger.create({
       onUpdate: (self) => { gsap.to(tween, { timeScale: self.direction === -1 ? -1.5 : 1, duration: 0.4, overwrite: true }); },
     });

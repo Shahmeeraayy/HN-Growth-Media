@@ -18,6 +18,7 @@
 </div>
 
 <div class="cursor" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
 
 <a class="skip" href="#services">Skip to services</a>
 
@@ -26,23 +27,30 @@
     <img class="brand-logo" src="logo.png" alt="HN Growth Media">
   </a>
   <nav class="nav" aria-label="Main">
-    <a href="#services">Services</a>
-    <a href="#process">Process</a>
-    <a href="#about">About</a>
-    <a href="#faq">FAQ</a>
-    <a class="nav-cta" href="#contact">Get a quote</a>
+    <a href="#services" data-nav="services">Services</a>
+    <a href="#process" data-nav="process">Process</a>
+    <a href="#about" data-nav="about">About</a>
+    <a href="#faq" data-nav="faq">FAQ</a>
+    <a class="nav-cta shine" href="#contact">Get a quote</a>
   </nav>
   <button class="menu-btn" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu">
     <span></span><span></span>
   </button>
+  <div class="progress" aria-hidden="true"></div>
 </header>
 
 <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile" hidden>
-  <a href="#services">Services</a>
-  <a href="#process">Process</a>
-  <a href="#about">About</a>
-  <a href="#faq">FAQ</a>
-  <a href="#contact">Get a quote</a>
+  <div class="mobile-nav-inner">
+    <a href="#services"><span>01</span>Services</a>
+    <a href="#process"><span>02</span>Process</a>
+    <a href="#about"><span>03</span>About</a>
+    <a href="#faq"><span>04</span>FAQ</a>
+    <a href="#contact"><span>05</span>Get a quote</a>
+  </div>
+  <div class="mobile-nav-foot">
+    <a href="mailto:brownhazel2003@gmail.com">brownhazel2003@gmail.com</a>
+    <p>Reply within one working day.</p>
+  </div>
 </nav>
 
 <main id="top">
@@ -59,7 +67,7 @@
       </h1>
       <p class="lede hero-fade">Websites, Google Business Profile, ads, social media and AI automation for local businesses. Premium work, one point of contact, fixed prices.</p>
       <div class="hero-actions hero-fade">
-        <a class="btn btn-primary magnetic" href="#contact">Get a free quote</a>
+        <a class="btn btn-primary magnetic shine" href="#contact">Get a free quote</a>
         <a class="btn btn-ghost magnetic" href="#services">See all 8 services</a>
       </div>
       <p class="hero-note hero-fade">Reply within one working day. Quotes are free and fixed.</p>
@@ -293,10 +301,45 @@
         </li>
         <li class="step step-cta">
           <h3>Ready?</h3>
-          <a class="btn btn-primary magnetic" href="#contact">Start with a free quote</a>
+          <a class="btn btn-primary magnetic shine" href="#contact">Start with a free quote</a>
         </li>
       </ol>
     </div>
+  </section>
+
+  <!-- FIRST 30 DAYS -->
+  <section class="timeline-section" id="first-30">
+    <div class="section-head reveal">
+      <h2>Your first 30 days</h2>
+      <p>What a typical start looks like when a business brings everything to HN at once.</p>
+    </div>
+    <ol class="timeline">
+      <li class="tl-item">
+        <span class="tl-when">Day 1</span>
+        <h3>Quote in your inbox</h3>
+        <p>One email from you, one fixed price and date back. Nothing starts until you say yes.</p>
+      </li>
+      <li class="tl-item">
+        <span class="tl-when">Day 3</span>
+        <h3>Google Business Profile live</h3>
+        <p>Profile claimed, filled in and sent for verification. Photos, hours, services and categories done.</p>
+      </li>
+      <li class="tl-item">
+        <span class="tl-when">Week 2</span>
+        <h3>Website draft to review</h3>
+        <p>You see the real pages on your phone, with your words and photos, and mark up anything to change.</p>
+      </li>
+      <li class="tl-item">
+        <span class="tl-when">Week 3</span>
+        <h3>Site live, ads on</h3>
+        <p>Domain connected, site published, first Google Ads running with call tracking.</p>
+      </li>
+      <li class="tl-item">
+        <span class="tl-when">Day 30</span>
+        <h3>First report</h3>
+        <p>Calls, direction requests, ad spend and ranking on one page. Then we decide what to push next.</p>
+      </li>
+    </ol>
   </section>
 
   <!-- INDUSTRIES -->
@@ -371,7 +414,7 @@
     <h2 id="cta-title" class="cta-title">Let's grow.</h2>
     <p class="reveal">Tell Mutahar what you need. Free quote within one working day.</p>
     <div class="reveal">
-      <a class="btn btn-primary magnetic" href="#contact">Get a free quote</a>
+      <a class="btn btn-primary magnetic shine" href="#contact">Get a free quote</a>
     </div>
   </section>
 
@@ -418,7 +461,7 @@
         <textarea id="f-msg" name="message" rows="4"></textarea>
       </div>
       <p class="form-error" id="form-error" hidden>Add your name and a phone number or email so the reply can reach you.</p>
-      <button class="btn btn-primary magnetic" type="submit">Send quote request</button>
+      <button class="btn btn-primary magnetic shine" type="submit">Send quote request</button>
       <p class="form-note">This opens your email app with the message filled in. Nothing is stored on this site.</p>
     </form>
   </section>
@@ -426,21 +469,35 @@
 </main>
 
 <footer class="foot">
-  <div class="foot-brand">
-    <img class="foot-logo" src="logo.png" alt="HN Growth Media">
-    <span class="foot-tag">Websites, Google and AI for local businesses</span>
+  <div class="foot-grid">
+    <div class="foot-brand">
+      <img class="foot-logo" src="logo.png" alt="HN Growth Media">
+      <p class="foot-tag">A growth studio for local businesses. Websites, Google, ads, social and AI, handled by one person you can actually reach.</p>
+      <a class="foot-email" href="mailto:brownhazel2003@gmail.com">brownhazel2003@gmail.com</a>
+    </div>
+    <nav class="foot-col" aria-label="Services">
+      <h4>Services</h4>
+      <a href="#services">Website creation</a>
+      <a href="#services">Website changes</a>
+      <a href="#services">Google Business Profile</a>
+      <a href="#services">Google Ads and leads</a>
+      <a href="#services">AI automation</a>
+      <a href="#services">Social media posting</a>
+    </nav>
+    <nav class="foot-col" aria-label="Company">
+      <h4>Studio</h4>
+      <a href="#process">How a job runs</a>
+      <a href="#first-30">Your first 30 days</a>
+      <a href="#about">About Mutahar</a>
+      <a href="#faq">Questions</a>
+      <a href="#contact">Get a quote</a>
+    </nav>
   </div>
-  <nav class="foot-nav" aria-label="Footer">
-    <a href="#services">Services</a>
-    <a href="#process">Process</a>
-    <a href="#about">About</a>
-    <a href="#faq">FAQ</a>
-    <a href="#contact">Contact</a>
-  </nav>
-  <div class="foot-links">
-    <a href="mailto:brownhazel2003@gmail.com">brownhazel2003@gmail.com</a>
+  <div class="foot-bar">
+    <p class="foot-copy">© <span id="year"></span> HN Growth Media. All rights reserved.</p>
+    <button class="to-top" type="button" aria-label="Back to top">Back to top<span class="to-top-arrow" aria-hidden="true"></span></button>
   </div>
-  <p class="foot-copy">© <span id="year"></span> HN Growth Media. All rights reserved.</p>
+  <div class="foot-mark" aria-hidden="true">HN Growth Media</div>
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha384-g4NTh/Iv5PPU4xPyhEWqPcwtNXOvdaDI8LLnyYfyNZOjKJeYQyjzQ9X5275eBjpt" crossorigin="anonymous"></script>
