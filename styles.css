@@ -98,13 +98,14 @@ body.has-cursor .cursor { display: block; }
   background: rgba(247, 243, 234, 0.85); backdrop-filter: blur(10px);
   padding: 12px var(--pad-x);
   display: flex; align-items: center; justify-content: space-between; gap: 24px;
-  transition: box-shadow 200ms ease, transform 350ms ease, padding 250ms ease;
+  transition: box-shadow 200ms ease, transform 350ms ease;
 }
-.top.scrolled { box-shadow: 0 1px 0 var(--line), 0 10px 30px -20px rgba(0, 0, 0, 0.35); padding-top: 8px; padding-bottom: 8px; }
+.top.scrolled { box-shadow: 0 1px 0 var(--line), 0 10px 30px -20px rgba(0, 0, 0, 0.35); }
 .top.hidden { transform: translateY(-100%); }
 body.menu-open .top { transform: none; }
 .progress { position: absolute; left: 0; bottom: 0; height: 2px; width: 100%; background: var(--gold-grad); transform: scaleX(0); transform-origin: left; }
-.top.scrolled .brand-logo { height: 48px; }
+.brand-logo { transition: transform 250ms ease; transform-origin: left center; }
+.top.scrolled .brand-logo { transform: scale(0.82); }
 .nav a.active::after { transform: scaleX(1); transform-origin: left; }
 .brand { display: inline-flex; align-items: center; text-decoration: none; }
 .brand-logo { height: 60px; width: auto; display: block; }
